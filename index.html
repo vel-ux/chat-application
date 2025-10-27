@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chat App UI</title>
+  <style>
+    /* Reset & base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #f5f5f5; color: #333; height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .chat-container { width: 90%; max-width: 600px; height: 80vh; background: #fff; border: 1px solid #ddd; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    
+    /* Header */
+    .chat-header { padding: 16px; background: #1a73e8; color: #fff; font-size: 1.25rem; font-weight: bold; }
+    
+    /* Message area */
+    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; background: #fafafa; }
+    .message { margin-bottom: 12px; max-width: 80%; line-height: 1.4; border-radius: 12px; padding: 10px 14px; }
+    .message.user { background: #1a73e8; color: #fff; margin-left: auto; }
+    .message.bot { background: #e0e0e0; color: #333; margin-right: auto; }
+    
+    /* Input area */
+    .chat-input { display: flex; padding: 12px; border-top: 1px solid #ddd; }
+    .chat-input input[type="text"] { flex: 1; padding: 10px 14px; font-size: 1rem; border: 1px solid #ccc; border-radius: 20px; }
+    .chat-input button { margin-left: 8px; padding: 10px 16px; font-size: 1rem; background: #1a73e8; color: #fff; border: none; border-radius: 20px; cursor: pointer; }
+    .chat-input button:disabled { background: #8ab4f8; cursor: not-allowed; }
+    
+    /* Scroll styling (optional) */
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">Chat with AI</div>
+  <div class="chat-messages" id="messages">
+    <div class="message bot">Hello! How can I help you today?</div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="input" placeholder="Type your message…" />
+    <button id="sendBtn" disabled>Send</button>
+  </div>
+</div>
+
+<script>
+  const inputEl = document.getElementById('input');
+  const sendBtn = document.getElementById('sendBtn');
+  const messagesEl = document.getElementById('messages');
+  
+  inputEl.addEventListener('input', () => {
+    sendBtn.disabled = inputEl.value.trim() === '';
+  });
+  
+  sendBtn.addEventListener('click', () => {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    addMessage('user', text);
+    inputEl.value = '';
+    sendBtn.disabled = true;
+    
+    // Simulate bot response
+    setTimeout(() => {
+      addMessage('bot', "You said: " + text);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }, 500);
+  });
+  
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'message ' + role;
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
